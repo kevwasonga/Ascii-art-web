@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ASCII Art Generator</title>
+    <style>
+        #result {
+            font-family: monospace;
+            white-space: pre;
+        }
+    </style>
+</head>
+<body>
+    <h1>ASCII Art Generator</h1>
+    <form id="asciiForm">
+        <label for="inputText">Enter text:</label>
+        <textarea id="inputText" name="inputText" required rows="4" cols="50"></textarea>
+        <br>
+        <button type="submit">Generate</button>
+    </form>
+    <h2>Result:</h2>
+    <div id="result"></div>
+    <script>
+        document.getElementById('asciiForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const inputText = document.getElementById('inputText').value;
+            const response = await fetch('/ascii-art', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ input: inputText })
+            });
+            const result = await response.text();
+            document.getElementById('result').textContent = result;
+        });
+    </script>
+</body>
+</html>
