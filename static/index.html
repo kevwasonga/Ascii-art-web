@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>ASCII Art Generator</title>
+
+    <link rel="stylesheet" href="style.css">
     <style>
         #result {
             font-family: monospace;
@@ -17,33 +19,36 @@
         <textarea id="inputText" name="inputText" required rows="4" cols="50"></textarea>
         <br>
         <button type="button" id="standardBtn">Standard</button>
-        <button type="button" id="shadowBtn" disabled>Shadow</button>
-        <button type="button" id="thinkertoyBtn" disabled>Thinkertoy</button>
+        <button type="button" id="shadowBtn">Shadow</button>
+        <button type="button" id="thinkertoyBtn">Thinkertoy</button>
     </form>
     <h2>Output:</h2>
     <div id="result"></div>
     <script>
-        document.getElementById('standardBtn').addEventListener('click', async function () {
+        async function generateASCIIArt(banner) {
             const inputText = document.getElementById('inputText').value;
             const response = await fetch('/ascii-art', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ input: inputText })
+                body: JSON.stringify({ banner: banner, input: inputText })
             });
             const result = await response.text();
             document.getElementById('result').textContent = result;
+        }
+
+        document.getElementById('standardBtn').addEventListener('click', function () {
+            generateASCIIArt('standard');
         });
 
-        // Shadow and Thinkertoy buttons are currently disabled
-        // document.getElementById('shadowBtn').addEventListener('click', function () {
-        //     // Add functionality for shadow button here
-        // });
+        document.getElementById('shadowBtn').addEventListener('click', function () {
+            generateASCIIArt('shadow');
+        });
 
-        // document.getElementById('thinkertoyBtn').addEventListener('click', function () {
-        //     // Add functionality for thinkertoy button here
-        // });
+        document.getElementById('thinkertoyBtn').addEventListener('click', function () {
+            generateASCIIArt('thinkertoy');
+        });
     </script>
 </body>
 </html>

@@ -7,17 +7,10 @@ import (
 	"net/http"
 	"strings"
 
-	"co/webconfig/asciiArt"
+	"as/asciiArt"
 )
 
 func main() {
-	// Load the banner map
-	fileName := asciiArt.BannerFile()
-	bannerMap, err := asciiArt.LoadBannerMap("fileName")
-	if err != nil {
-		log.Fatalf("Failed to load banner file: %v", err)
-	}
-
 	// Serve the static HTML page
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 
@@ -28,11 +21,21 @@ func main() {
 		}
 
 		var request struct {
-			Input string `json:"input"`
+			Banner string `json:"banner"`
+			Input  string `json:"input"`
 		}
 
 		if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 			http.Error(w, "Invalid request body", http.StatusBadRequest)
+			return
+		}
+
+		fileName := asciiArt.BannerFile(request.Banner)
+
+		// Load the banner map from the file
+		bannerMap, err := asciiArt.LoadBannerMap(fileName)
+		if err != nil {
+			http.Error(w, "Failed to load banner file", http.StatusInternalServerError)
 			return
 		}
 
@@ -42,7 +45,7 @@ func main() {
 	})
 
 	fmt.Println("Server is listening on port 8080...")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8081", nil))
 }
 
 func generateASCIIArt(input string, bannerMap map[int][]string) string {
