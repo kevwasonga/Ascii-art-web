@@ -12,7 +12,8 @@ import (
 
 func main() {
 	// Load the banner map
-	bannerMap, err := asciiArt.LoadBannerMap("banner.txt")
+	fileName := asciiArt.BannerFile()
+	bannerMap, err := asciiArt.LoadBannerMap("fileName")
 	if err != nil {
 		log.Fatalf("Failed to load banner file: %v", err)
 	}
