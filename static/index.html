@@ -13,16 +13,17 @@
 <body>
     <h1>ASCII Art Generator</h1>
     <form id="asciiForm">
-        <label for="inputText">Enter text:</label>
+        <label for="inputText">Enter text here:</label>
         <textarea id="inputText" name="inputText" required rows="4" cols="50"></textarea>
         <br>
-        <button type="submit">Generate</button>
+        <button type="button" id="standardBtn">Standard</button>
+        <button type="button" id="shadowBtn" disabled>Shadow</button>
+        <button type="button" id="thinkertoyBtn" disabled>Thinkertoy</button>
     </form>
-    <h2>Result:</h2>
+    <h2>Output:</h2>
     <div id="result"></div>
     <script>
-        document.getElementById('asciiForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
+        document.getElementById('standardBtn').addEventListener('click', async function () {
             const inputText = document.getElementById('inputText').value;
             const response = await fetch('/ascii-art', {
                 method: 'POST',
@@ -34,6 +35,15 @@
             const result = await response.text();
             document.getElementById('result').textContent = result;
         });
+
+        // Shadow and Thinkertoy buttons are currently disabled
+        // document.getElementById('shadowBtn').addEventListener('click', function () {
+        //     // Add functionality for shadow button here
+        // });
+
+        // document.getElementById('thinkertoyBtn').addEventListener('click', function () {
+        //     // Add functionality for thinkertoy button here
+        // });
     </script>
 </body>
 </html>
